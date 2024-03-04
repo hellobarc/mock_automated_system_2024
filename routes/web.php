@@ -41,6 +41,9 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::get('/candidate/register-form', 'candidateForm')->name('candidate.form');
         Route::post('/candidate/register-form-store', 'candidateFormStore')->name('candidate.form.store');
         Route::get('/candidate-list', 'candidateList')->name('candidate.list');
+        Route::get('/candidate-edit/{id}', 'candidateEdit')->name('candidate.edit');
+        Route::post('/candidate-edit-store', 'candidateEditStore')->name('candidate.edit.store');
+        Route::get('/candidate-delete/{id}', 'candidateDelete')->name('candidate.delete');
     });
 
 });

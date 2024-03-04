@@ -3,7 +3,8 @@
         {{-- <a href="" class="fs-2 fw-bold" style="text-decoration: none">Register Panel</a> --}}
         <ul>
             <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-            <li><a href="#"><i class="fa fa-user"></i>Student List</a></li>
+            <li><a href="{{ route('candidate.form') }}"><i class="fa fa-address-book"></i>Register Candidate </a></li>
+            <li><a href="{{ route('candidate.list') }}"><i class="fa fa-user"></i>Student List</a></li>
             <li><a href="#"><i class="fa fa-line-chart"></i>Timeline</a></li>
             <li><a href="#"><i class="fa fa-comment-o"></i>Comments</a></li>
             <li><a href="#"><i class="fa fa-gears"></i>Settings</a></li>

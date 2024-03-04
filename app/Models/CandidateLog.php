@@ -14,4 +14,8 @@ class CandidateLog extends Model
         'email',
         'unique_id'
     ];
+
+    public function CandidateInfo(){
+        return $this->hasOne(CandidateInfo::class, 'candidate_log_id');
+    }
 }
