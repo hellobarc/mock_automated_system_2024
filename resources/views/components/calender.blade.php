@@ -31,14 +31,5 @@
 </div>
 
 <script>
-    // window.onload = function(){
-    // let date = document.getElementById("id73");
-    // date.addEventListener('click', function(){
-    //     let dateValue = id73.dataset.date;
-    //     let monthValue = id73.dataset.month;
-    //     let yearValue = id73.dataset.year;
-    //     console.log(dateValue,monthValue,yearValue);
-    // });
-
-    // }
+    
 </script>

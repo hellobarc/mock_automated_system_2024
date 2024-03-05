@@ -34,9 +34,7 @@
                                             <input type="text" class="form-control" name="email" required value="{{ $getCandidateData->email }}">
                                         </div>
                                     </div>
-                                    
                                 </div>
-
                                 <div class="row my-4">
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <div class="form-group">
@@ -54,9 +52,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
                                 </div>
-
                                 <div class="row my-4">
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <div class="form-group">
@@ -68,15 +64,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="">Date</label>
-                                            <input type="Date" class="form-control" name="date" value="{{ $getCandidateData->date }}">
-                                        </div>
-                                    </div> --}}
-                                    
-                                </div>
-                                <div class="row my-4">
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label for="">Student Source</label>
@@ -87,12 +74,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="">Price</label>
-                                            <input type="price" class="form-control" name="price" value="{{ $getCandidateData->price }}">
-                                        </div>
-                                    </div> --}}
                                 </div>
                                 <div class="row">
                                     <div class="d-flex justify-content-end">

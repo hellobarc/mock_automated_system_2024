@@ -150,6 +150,10 @@ body{
 .date-picker.free-slot{
   background-color: greenyellow;
 }
+
+.date-picker.booked{
+  background-color: orangered;
+}
 /* sunday */
 .date-picker:nth-child(1) {
 color: red;

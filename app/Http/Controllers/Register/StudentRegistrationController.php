@@ -27,12 +27,13 @@ class StudentRegistrationController extends Controller
     
     public function candidateForm(){
         $getMockDates = MockDates::get();
-        
+        // dd($getMockDates);
         return view('register.studentRegistration.registrationForm2', compact('getMockDates'));
     }
 
     
     public function candidateFormStore(Request $request){
+
         $request->validate([
             'full_name' => 'required|string|max:50',
             'email' => 'required|string|max:50',
@@ -40,14 +41,14 @@ class StudentRegistrationController extends Controller
             'branch_name_for_mock' => 'required|max:20',
             'student_source' => 'required|max:20',
             'purpose_of_ielts' => 'required|max:20',
-            'price' => 'required|max:20'
+            'price' => 'required|max:20',
+            'selected_date' => 'required|string|max:20'
         ]);
 
         $fullName = $request->full_name;
         $email = $request->email;
         $phoneNumber = $request->phone_number;
         $BranchName = $request->branch_name_for_mock;
-        // $date = $request->date;
         $studentSource = $request->student_source;
         $purposeOfIELTS = $request->purpose_of_ielts;
         $price = $request->price;
@@ -68,6 +69,11 @@ class StudentRegistrationController extends Controller
             'phone_number' => $phoneNumber,
             'student_source' => $studentSource
         ]);
+
+        MockDates::create([
+            'date' => $request->selected_date,
+            'total_allocation' => 2
+        ]);
         return redirect()->back()->with('success', 'Student Registered');
     }
 
@@ -77,8 +83,25 @@ class StudentRegistrationController extends Controller
                             ->where('candidate_logs.id', $id)
                             ->select('candidate_logs.*','candidate_infos.*')
                             ->first();
-        // dd($getCandidateData);
         return view('register.studentRegistration.candidateEdit', compact('getCandidateData'));
+    }
+
+    public function candidateEditStore(Request $request){
+        $studentID = $request->id;
+
+        CandidateLog::where('id', $studentID)
+            ->update([
+                'full_name' => $request->full_name,
+                'email' => $request->email
+            ]);
+
+        CandidateInfo::where('candidate_log_id', $studentID)
+            ->update([
+                'purpose_of_ielts' => $request->purpose_of_ielts,
+                'phone_number' => $request->phone_number,
+                'student_source' => $request->student_source
+            ]);
+        return redirect()->back()->with('success', 'Information Edited Successfully');
     }
 
     public function candidateDelete($id){
@@ -87,6 +110,4 @@ class StudentRegistrationController extends Controller
 
         return redirect()->back()->with('success', 'Candidate Deleted Successfully');
     }
-
-
 }
