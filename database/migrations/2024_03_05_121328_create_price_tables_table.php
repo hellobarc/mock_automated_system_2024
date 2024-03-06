@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('mock_number');
             $table->string('mock_price');
-            $table->enum('status',['active','inactive']);
+            $table->enum('offer_status',['active','inactive']);
             $table->timestamps();
         });
     }

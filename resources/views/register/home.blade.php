@@ -1,32 +1,38 @@
 @extends('layouts.app')
   
 @section('content')
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-  
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+<div class="sidebar-wrapper">
+        @include('register.sidebar')
+        <div class="main_content">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">{{ __('Dashboard') }}</div>
+            
+                            <div class="card-body">
+                                @if (session('status'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
+            
+                                You are a Register.
+                            </div>
                         </div>
-                    @endif
-  
-                    You are a User.
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div> --}}
-<div class="sidebar-wrapper">
+</div>
+
+{{-- <div class="sidebar-wrapper">
     @include('register.sidebar')
     <div class="main_content"> 
-        {{-- <h2>test</h2>
-        @yield('register-content') --}}
+        <h2>test</h2>
+        @yield('register-content')
 
-        {{-- form --}}
+        form
 
         @include('flash-message')
         <div class="container">
@@ -124,5 +130,5 @@
             </div>
         </div>
     </div>    
-</div>
+</div> --}}
 @endsection

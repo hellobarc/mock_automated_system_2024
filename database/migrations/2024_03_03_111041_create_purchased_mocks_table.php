@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->biginteger('candidate_log_id');
             $table->string('date');
+            $table->string('mock_number');
             $table->string('payment_status');
             $table->integer('paid_fees');
-            $table->integer('due_fees');
+            $table->integer('due_fees')->nullable();
             $table->integer('total_fees');
             $table->timestamps();
         });

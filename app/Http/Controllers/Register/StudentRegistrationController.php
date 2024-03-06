@@ -8,7 +8,9 @@ use App\Models\{
     StudentRegistration,
     CandidateLog,
     CandidateInfo,
-    MockDates
+    MockDates,
+    PuchasedMock,
+    PriceTable
 };
 use DB;
 
@@ -27,8 +29,14 @@ class StudentRegistrationController extends Controller
     
     public function candidateForm(){
         $getMockDates = MockDates::get();
-        // dd($getMockDates);
-        return view('register.studentRegistration.registrationForm2', compact('getMockDates'));
+        $getMockPrices = DB::table('price_tables')
+            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+            ->where('price_tables.offer_status','active')
+            ->get();
+            
+        // dd($getMockPrices);
+        return view('register.studentRegistration.registrationForm2', compact('getMockDates','getMockPrices'));
     }
 
     
@@ -41,8 +49,9 @@ class StudentRegistrationController extends Controller
             'branch_name_for_mock' => 'required|max:20',
             'student_source' => 'required|max:20',
             'purpose_of_ielts' => 'required|max:20',
-            'price' => 'required|max:20',
-            'selected_date' => 'required|string|max:20'
+            'selected_date' => 'required|string|max:20',
+            'mock_number' => 'required|max:10',
+            'payment_recieved' => 'required|max:20',
         ]);
 
         $fullName = $request->full_name;
@@ -52,7 +61,10 @@ class StudentRegistrationController extends Controller
         $studentSource = $request->student_source;
         $purposeOfIELTS = $request->purpose_of_ielts;
         $price = $request->price;
-
+        $mockNumbers = $request->mock_number;
+        $payment_recieved = $request->payment_recieved;
+        $mockOffers = $request->mock_offers;
+        
         $time = time();
         $studentID = Helper::UniqueID(5).substr($BranchName,0,1).date('dmy',$time);
 
@@ -74,6 +86,38 @@ class StudentRegistrationController extends Controller
             'date' => $request->selected_date,
             'total_allocation' => 2
         ]);
+
+        $getMockPrices = PriceTable::where('mock_number', $mockNumbers)
+                        ->first();
+        $payment_total = $getMockPrices->mock_price;
+
+        if(isset($mockOffers)){
+            $payment_total = $request->mock_offers;
+        }
+        
+        if($payment_recieved < $getMockPrices->mock_price){
+            $due_fees = $payment_total-$payment_recieved;
+
+            PurchasedMock::create([
+                'candidate_log_id' => $candidateLog->id,
+                'mock_number' => $mockNumbers,
+                'date' => date('d-m-y', $time),
+                'payment_status' => 'due',
+                'paid_fees' => $payment_recieved,
+                'due_fees' => $due_fees,
+                'total_fees' => $payment_total,
+            ]);
+        }
+        elseif($payment_recieved == $getMockPrices->mock_price){
+            PurchasedMock::create([
+                'candidate_log_id' => $candidateLog->id,
+                'date' => date('d-m-y', $time),
+                'mock_number' => $mockNumbers,
+                'payment_status' => 'paid',
+                'paid_fees' => $payment_recieved,
+            ]);
+        }
+        
         return redirect()->back()->with('success', 'Student Registered');
     }
 
