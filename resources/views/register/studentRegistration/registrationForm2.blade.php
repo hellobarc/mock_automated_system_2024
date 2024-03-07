@@ -23,7 +23,10 @@
                                     <div class="row my-4">
                                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <input type="hidden" name="selected_date" id="selected_date">
+                                                <div id="selected_dates">
+                                                    
+                                                </div>
+                                                {{-- <input type="hidden" name="selected_date" id="selected_date"> --}}
                                                 <label for="">Full Name</label>
                                                 <input type="text" class="form-control" name="full_name" required>
                                             </div>
@@ -115,7 +118,7 @@
                                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                             <div class="form-group" id="mock_offers">
                                                 <label for="">Offers</label>
-                                                <input type="text" name="mock_offers" class="form-control" id="mock_offers_value">
+                                                <input type="text" name="mock_offers" class="form-control" id="mock_offers_value" readonly>
                                             </div>
                                         </div>
                                     </div>

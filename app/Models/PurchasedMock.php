@@ -13,6 +13,7 @@ class PurchasedMock extends Model
         'candidate_log_id',
         'date',
         'payment_status',
+        'mock_number',
         'paid_fees',
         'due_fees',
         'total_fees'

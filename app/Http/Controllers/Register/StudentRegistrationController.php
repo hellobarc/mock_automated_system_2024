@@ -9,7 +9,7 @@ use App\Models\{
     CandidateLog,
     CandidateInfo,
     MockDates,
-    PuchasedMock,
+    PurchasedMock,
     PriceTable
 };
 use DB;
@@ -41,8 +41,39 @@ class StudentRegistrationController extends Controller
 
     
     public function candidateFormStore(Request $request){
+        // dd($request);
+        $selected_dates_form = $request->selected_dates;
+        // $selected_dates_unique = array_unique($request->selected_dates);
+        // dd($selected_dates_unique);
 
-        $request->validate([
+        $dates_with_count = array_count_values($selected_dates_form);
+        $dates_keys = array_keys($dates_with_count);
+        $dates_count = array_values($dates_with_count);
+        $selected_dates = [];
+        $itereateDates = count($dates_with_count);
+
+        for($i=0 ; $i<$itereateDates ; $i++){
+            if($dates_count[$i] % 2 == 0){
+                
+            }
+            else{
+                array_push($selected_dates, $dates_keys[$i]);
+            }
+        }
+
+
+        dd($selected_dates_form,$dates_with_count, $dates_keys,$itereateDates,$dates_count,$selected_dates);
+
+        // for($dates_with_count as $element){
+        //     if($element % 2 ==0){
+        //         array_push($selected_dates, )
+        //     }
+        // }
+        
+        
+
+        $request->validate(
+            [
             'full_name' => 'required|string|max:50',
             'email' => 'required|string|max:50',
             'phone_number' => 'required|string|max:20',
@@ -52,7 +83,8 @@ class StudentRegistrationController extends Controller
             'selected_date' => 'required|string|max:20',
             'mock_number' => 'required|max:10',
             'payment_recieved' => 'required|max:20',
-        ]);
+            ]
+        );
 
         $fullName = $request->full_name;
         $email = $request->email;
@@ -68,24 +100,26 @@ class StudentRegistrationController extends Controller
         $time = time();
         $studentID = Helper::UniqueID(5).substr($BranchName,0,1).date('dmy',$time);
 
-        $candidateLog = CandidateLog::create([
+        $candidateLog = CandidateLog::create(
+            [
             'unique_id' => $studentID,
             'full_name' => $fullName,
             'email' => $email,
-        ]);
+            ]
+        );
 
-        CandidateInfo::create([
+        CandidateInfo::create(
+            [
             'candidate_log_id' => $candidateLog->id,
             'branch_name_for_mock' => $BranchName,
             'purpose_of_ielts' => $purposeOfIELTS,
             'phone_number' => $phoneNumber,
             'student_source' => $studentSource
-        ]);
+            ]
+        );
 
-        MockDates::create([
-            'date' => $request->selected_date,
-            'total_allocation' => 2
-        ]);
+        MockDates::where('date',$request->selected_date)
+        ->increment('total_allocation',1);
 
         $getMockPrices = PriceTable::where('mock_number', $mockNumbers)
                         ->first();
@@ -95,10 +129,11 @@ class StudentRegistrationController extends Controller
             $payment_total = $request->mock_offers;
         }
         
-        if($payment_recieved < $getMockPrices->mock_price){
+        if($payment_recieved < $payment_total ){
             $due_fees = $payment_total-$payment_recieved;
 
-            PurchasedMock::create([
+            PurchasedMock::create(
+                [
                 'candidate_log_id' => $candidateLog->id,
                 'mock_number' => $mockNumbers,
                 'date' => date('d-m-y', $time),
@@ -106,16 +141,20 @@ class StudentRegistrationController extends Controller
                 'paid_fees' => $payment_recieved,
                 'due_fees' => $due_fees,
                 'total_fees' => $payment_total,
-            ]);
+                ]
+            );
         }
-        elseif($payment_recieved == $getMockPrices->mock_price){
-            PurchasedMock::create([
+        elseif( $payment_recieved == $payment_total ){
+            PurchasedMock::create(
+                [
                 'candidate_log_id' => $candidateLog->id,
                 'date' => date('d-m-y', $time),
                 'mock_number' => $mockNumbers,
                 'payment_status' => 'paid',
                 'paid_fees' => $payment_recieved,
-            ]);
+                'total_fees' => $payment_total
+                ]
+            );
         }
         
         return redirect()->back()->with('success', 'Student Registered');
@@ -134,17 +173,21 @@ class StudentRegistrationController extends Controller
         $studentID = $request->id;
 
         CandidateLog::where('id', $studentID)
-            ->update([
+            ->update(
+                [
                 'full_name' => $request->full_name,
                 'email' => $request->email
-            ]);
+                ]
+            );
 
         CandidateInfo::where('candidate_log_id', $studentID)
-            ->update([
+            ->update(
+                [
                 'purpose_of_ielts' => $request->purpose_of_ielts,
                 'phone_number' => $request->phone_number,
                 'student_source' => $request->student_source
-            ]);
+                ]
+            );
         return redirect()->back()->with('success', 'Information Edited Successfully');
     }
 

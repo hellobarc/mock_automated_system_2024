@@ -137,23 +137,28 @@ body{
   text-align: center;
   vertical-align: top;
 }
-
+/* 
 .date-picker.selected {
   font-weight: bold;
   outline: 1px dashed #00BCD4;
-}
+} */
 
 .date-picker.selected span {
   border-bottom: 2px solid currentColor;
 }
 
-.date-picker.free-slot{
+.date-picker-free-slot{
   background-color: greenyellow;
 }
 
 .date-picker.booked{
   background-color: orangered;
 }
+
+.date-picker-selected{
+  background-color: rgba(46, 76, 242, 0.849);
+}
+
 /* sunday */
 .date-picker:nth-child(1) {
 color: red;
