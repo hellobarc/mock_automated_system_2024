@@ -17,16 +17,34 @@
                                 <h2>Student Registration</h2>
                             </div>
                             <div class="card-body">
-                                @include('components.calender')
+                                <div class="row my-4">
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <label for="" class="fs-4">Select Branch</label>
+                                        <select name="" id="branch_select_for_calender" class="form-control" onchange="selectBranch(event)">
+                                            <option value="" selected>Select An Option</option>
+                                            <option value="uttara">Uttara</option>
+                                            <option value="mirpur">Mirpur</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="calender-div" id="calender-div">
+                                    @include('components.calender')
+                                </div>
+                                <div class="" id="time_slot_div">
+                                    
+                                        
+                                    
+                                </div>
                                 <form action="{{ route('candidate.form.store') }}" method="POST" class="form-control">
                                     @csrf
+                                    
                                     <div class="row my-4">
                                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                             <div class="form-group">
                                                 <div id="selected_dates">
                                                     
                                                 </div>
-                                                {{-- <input type="hidden" name="selected_date" id="selected_date"> --}}
+                                                {{-- <input type="hidden" name="selected_date_for_branch" id="selected_date"> --}}
                                                 <label for="">Full Name</label>
                                                 <input type="text" class="form-control" name="full_name" required>
                                             </div>
@@ -139,7 +157,8 @@
 @endsection
 
 <script>
-    var mockDates = "{{ $getMockDates }}";
+    var mockDatesUttara = "{{ $getMockDatesUttara }}";
+    var mockDatesMirpur = "{{ $getMockDatesMirpur }}";
     var mockNumber = "{{ $getMockPrices }}";
 
     var mockNumber = JSON.parse(mockNumber.replace(/&quot;/g, '"'));
@@ -154,25 +173,9 @@
         }
     });
 
-    
-    window.onload = function(){
-    document.getElementById('mock_offers').style.display = "none";
-
-}
 function offer_status(event) {
-        // var selectedID = document.getElementById('mock_number').value;
         var selectedID = event.target.value;
-        // console.log(selectedID);
-        // mockNumber.forEach(element => {
-        // if (element.offer_status == 'active' && selectedID == element.id ) {
-        //     document.getElementById('mock_offers').style.display = "block";
-        //     document.getElementById('mock_offers_value').value = element.price;
-        //     console.log(element.price);   
-        // }
-        // else{
-        //     document.getElementById('mock_offers').style.display = "none";
-        // }
-    // });
+        
         for(i=0;i<=Offers.length;i++){
             if ( selectedID == Offers[i] ){
                 document.getElementById('mock_offers').style.display = "block";
@@ -185,4 +188,9 @@ function offer_status(event) {
             }
         }
     }
+
+// async function getTimeSlots(){
+//     let timeSlotvalues =await axios.get("/get-time-slots");
+//     console.log(timeSlotvalues);
+// }
 </script>

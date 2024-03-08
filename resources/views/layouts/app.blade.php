@@ -84,7 +84,9 @@
             @yield('content')
         </main>
     </div>
-
+    {{-- axios --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <script src="{{ asset('js/register.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     {{-- bootstrap poppers --}}

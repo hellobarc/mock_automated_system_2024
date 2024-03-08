@@ -1,6 +1,10 @@
-// Calender
-var data = mockDates;
+window.onload = function(){
+    document.getElementById('calender-div').style.display = "none";
+    document.getElementById('mock_offers').style.display = "none";
+}
+var data = mockDatesUttara;
 var data = JSON.parse(data.replace(/&quot;/g, '"'));
+console.log(data);
 var dates = [];
 
 data.forEach(i => {
@@ -67,8 +71,6 @@ $dataHead += "</tr>";
 
 //alert($dataHead);
 document.getElementById("thead-month").innerHTML = $dataHead;
-
-
 monthAndYear = document.getElementById("monthAndYear");
 showCalendar(currentMonth, currentYear);
 
@@ -92,7 +94,31 @@ function jump() {
     showCalendar(currentMonth, currentYear);
 }
 
+var selectedBranch;
+function selectBranch(event) {
+    selectedBranch = event.target.value;
+    showCalendar(currentMonth, currentYear);
+}
+
 function showCalendar(month, year) {
+    if (selectedBranch == 'uttara') {
+        var data = mockDatesUttara;
+    }
+    else if (selectedBranch == 'mirpur') {
+        var data = mockDatesMirpur;
+    }
+    // var data = mockDatesUttara;
+    data = JSON.parse(data.replace(/&quot;/g, '"'));
+    console.log(data);
+    var dates = [];
+
+    data.forEach(i => {
+        let a = i.date;     //slice(0, 2);
+        dates.push(a);
+    });
+    console.log(dates);
+
+    var selectedDates = [];
 
     var firstDay = (new Date(year, month)).getDay();
 
@@ -129,59 +155,26 @@ function showCalendar(month, year) {
                 cell.setAttribute("id", "id" + date + (month + 1) + year);
                 cell.className = "date-picker";
                 cell.innerHTML = "<span>" + date + "</span>";
-                let presentDay = date + '-' +(month+1)+'-'+year;
-                
-                // for(k=0 ; k<=datesLength ; k++){
-                //     if(dates[k] == presentDay && date> today.getDate() ){
-                //         cell.className = "date-picker-free-slot";
-                //         cell.addEventListener('click', function(){
-                //             let dateValue = this.dataset.date;
-                //             let monthValue = this.dataset.month;
-                //             let yearValue = this.dataset.year;
-                //             // console.log(dateValue,monthValue,yearValue);
-                //             let selectedDate = dateValue + '-' + monthValue + '-' + yearValue ;
-                //             console.log(selectedDate);
-                //             document.getElementById('selected_date').value = selectedDate;
-                //             cell.className = "date-picker selected";
-                //         });
-                //     }
-                //     else if( date < today.getDate() && date != i){
-                //                 cell.className = "date-picker booked";
-                //         } 
-                // }
+                let presentDay = date + '-' + (month + 1) + '-' + year;
+
                 dates.forEach(i => {
-                    if(i == presentDay){
+                    if (i == presentDay && date > today.getDate()) {
                         cell.className = "date-picker-free-slot";
-                        cell.addEventListener('click', function(){
-                            // cell.className = "date-picker-selected";
+                        cell.addEventListener('click', function () {
                             let dateValue = this.dataset.date;
                             let monthValue = this.dataset.month;
                             let yearValue = this.dataset.year;
-                            // console.log(dateValue,monthValue,yearValue);
                             let selectedDate = dateValue + '-' + monthValue + '-' + yearValue;
                             console.log(selectedDate);
-                            // document.getElementById('selected_date').value = selectedDate;
                             const sel = document.getElementById(this.id);
-                            // sel.classList.remove("date-picker-free-slot");
-                            // sel.classList.add('date-picker-selected');
                             sel.classList.toggle('date-picker-selected');
-                            // var dates = document.getElementsByClassName('date-picker-selected').value;
-                            // console.log(dates);
-                            selectedDates.push(this.id);
-                            // console.log(this.id);
-                            // console.log(selectedDates);
-                            document.getElementById("selected_dates").insertAdjacentHTML('beforeend', `<input type="hidden" name="selected_dates[]" value="${this.id}">`);
-                            // var html = `<input type="hidden" name="selected_dates[]" value="${this.id}">`;
-                                // document.getElementById('selected_dates').insertAdjacentHTML(html);
-
-                            // selectedDates.forEach(element => {
-                                
-                            // });
-                        }); 
+                            selectedDates.push(selectedDate);
+                            document.getElementById("selected_dates").insertAdjacentHTML('beforeend', `<input type="hidden" name="selected_dates[]" value="${selectedDate}">`);
+                        });
                     }
-                    else if( date < today.getDate() && month == today.getMonth() && date != i){
+                    else if (date < today.getDate() && month == today.getMonth() && date != i) {
                         cell.className = "date-picker booked";
-                    }                  
+                    }
                 });
                 if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
                     cell.className = "date-picker selected";
@@ -193,29 +186,13 @@ function showCalendar(month, year) {
         }
         tbl.appendChild(row);
     }
+    document.getElementById('calender-div').style.display = "block";
 }
 
 function daysInMonth(iMonth, iYear) {
     return 32 - new Date(iYear, iMonth, 32).getDate();
 }
 
-// var data = mockDates;
-// var data = JSON.parse(data.replace(/&quot;/g, '"'));
-// var dates = [];
-// data.forEach(i => {
-//     let a = i.date.slice(0, 2);
-//     dates.push(a);
-// });
-// console.log(dates);
 
-// var dates = document.getElementsByClassName('date-picker-selected').value;
-// console.log(dates);
-
-// document.getElementById('selected_dates').value = selectedDates;
-var html = `<input type="hidden" name="selected_dates[]" value="">`;
-
-selectedDates.forEach(element => {
-    document.getElementById('selected_dates').innerHTML= html;
-});
 
 

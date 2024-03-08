@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mock_dates', function (Blueprint $table) {
+        Schema::create('speaking_times', function (Blueprint $table) {
             $table->id();
-            $table->string('date');
-            $table->enum('branch',['uttara','mirpur']);
-            $table->integer('total_allocation')->default(0);
+            $table->integer('mock_date_id');
+            $table->string('time');
+            $table->string('assinged_count');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mock_dates');
+        Schema::dropIfExists('speaking_times');
     }
 };

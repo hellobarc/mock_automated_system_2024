@@ -44,6 +44,8 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::get('/candidate-edit/{id}', 'candidateEdit')->name('candidate.edit');
         Route::post('/candidate-edit-store', 'candidateEditStore')->name('candidate.edit.store');
         Route::get('/candidate-delete/{id}', 'candidateDelete')->name('candidate.delete');
+
+        Route::get('/get-time-slots', 'speakingTimeSlots')->name('speaking.time.slots');
     });
 
 });
