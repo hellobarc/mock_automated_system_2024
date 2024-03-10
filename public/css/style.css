@@ -159,6 +159,10 @@ body{
   background-color: rgba(46, 76, 242, 0.849);
 }
 
+.selected_time_slot{
+  background-color: red;
+}
+
 /* sunday */
 .date-picker:nth-child(1) {
 color: red;

@@ -39,23 +39,23 @@ class StudentRegistrationController extends Controller
                             ->get();
 
         $getMockPrices = DB::table('price_tables')
-            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
-            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
-            ->where('price_tables.offer_status','active')
-            ->get();
+                            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+                            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+                            ->where('price_tables.offer_status','active')
+                            ->get();
+
+        // $getMockDatesTimeUttara = SpeakingTime::where('date')
+        //                     ->where('branch', 'uttara')
+        //                     ->get();
+
+        // $getMockDatesTimeMirpur = SpeakingTime::where('date')
+        //                     ->where('branch', 'mirpur')
+        //                     ->get();
 
         return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockPrices'));
     }
 
-    public function speakingTimeSlots($date,$branch){
-        $getMockDatesTime = speakingTime::where('date')
-                                                ->where('branch', $branch)
-                                                ->get();
-
-        return response()->json([
-            'time_slots' => $getMockDatesTime
-        ]);
-    }
+    
 
     public function candidateFormStore(Request $request){
         DB::beginTransaction();

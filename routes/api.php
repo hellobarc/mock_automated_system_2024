@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// Route::middleware(['auth', 'user-access:register'])->group(function () {
+//     Route::controller(StudentRegistrationController::class)->group(function(){
+//         Route::get('/get-time-slots/{date}/{branch}', 'speakingTimeSlots');
+//     });
+
+// });

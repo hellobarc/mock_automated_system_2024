@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SpeakingTimeController;
 use App\Http\Controllers\Register\{
     StudentRegistrationController
 };
@@ -45,9 +46,10 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::post('/candidate-edit-store', 'candidateEditStore')->name('candidate.edit.store');
         Route::get('/candidate-delete/{id}', 'candidateDelete')->name('candidate.delete');
 
-        Route::get('/get-time-slots', 'speakingTimeSlots')->name('speaking.time.slots');
+        
     });
 
+    Route::post('/get-time-slots',[SpeakingTimeController::class,'speakingTimeSlots'])->name('something-like-that');
 });
 
 Route::middleware(['auth', 'user-access:assessor'])->group(function () {

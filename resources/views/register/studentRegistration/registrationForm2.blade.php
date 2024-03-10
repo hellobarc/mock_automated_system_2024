@@ -30,10 +30,11 @@
                                 <div class="calender-div" id="calender-div">
                                     @include('components.calender')
                                 </div>
-                                <div class="" id="time_slot_div">
-                                    
-                                        
-                                    
+                                <div class="my-4 mx-2" >
+                                    <span>Avaiable time Slots</span>
+                                    <div class="" id="time_slot_div">
+
+                                    </div>
                                 </div>
                                 <form action="{{ route('candidate.form.store') }}" method="POST" class="form-control">
                                     @csrf
@@ -161,6 +162,7 @@
     var mockDatesMirpur = "{{ $getMockDatesMirpur }}";
     var mockNumber = "{{ $getMockPrices }}";
 
+
     var mockNumber = JSON.parse(mockNumber.replace(/&quot;/g, '"'));
     console.log(mockNumber[0].offer_status);
     console.log(mockNumber.length);
@@ -190,7 +192,10 @@ function offer_status(event) {
     }
 
 // async function getTimeSlots(){
-//     let timeSlotvalues =await axios.get("/get-time-slots");
+//     let timeSlotvalues =await axios.get("/get-time-slots"){
+//         date : ,
+//         branch : 
+//     };
 //     console.log(timeSlotvalues);
 // }
 </script>
