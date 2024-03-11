@@ -31,7 +31,7 @@
                                                 <td>{{ $item->full_name }}</td>
                                                 <td>{{ $item->email }}</td>
                                                 <td>{{ $item->phone_number }}</td>
-                                                <td>{{ $item->purpose_of_ielts }}</td>
+                                                <td>{{ strtoupper($item->purpose_of_ielts) }}</td>
                                                 <td>
                                                     <a href="{{ route('candidate.edit', $item->id) }}"
                                                         class="btn btn-primary">Edit</a>

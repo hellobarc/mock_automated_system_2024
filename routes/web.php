@@ -45,7 +45,7 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::get('/candidate-edit/{id}', 'candidateEdit')->name('candidate.edit');
         Route::post('/candidate-edit-store', 'candidateEditStore')->name('candidate.edit.store');
         Route::get('/candidate-delete/{id}', 'candidateDelete')->name('candidate.delete');
-
+        Route::post('/purchase-new-mock', 'purchaseNewMock')->name('buy.new.mock');
         
     });
 

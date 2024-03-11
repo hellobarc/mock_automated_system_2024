@@ -12,7 +12,8 @@ use App\Models\{
     MockDates,
     PurchasedMock,
     PriceTable,
-    speakingTime
+    SpeakingTime,
+    StudentsPurhcasedMockTimes
 };
 use App\Rules\SelectedDates;
 
@@ -58,6 +59,7 @@ class StudentRegistrationController extends Controller
     
 
     public function candidateFormStore(Request $request){
+        // dd($request->input());
         DB::beginTransaction();
         try{        
             $request->validate(
@@ -75,6 +77,7 @@ class StudentRegistrationController extends Controller
                 ]
             );
 
+            
             $selected_dates_form = $request->selected_dates;
 
             $dates_with_count = array_count_values($selected_dates_form);
@@ -90,6 +93,15 @@ class StudentRegistrationController extends Controller
                 else{
                     array_push($selected_dates, $dates_keys[$i]);
                 }
+            }
+
+            
+            $dates_ids = [];
+            foreach($selected_dates as $dates_id){
+                $request->validate([
+                    'time_Slot-'.$dates_id => 'required'
+                ]);
+                array_push($dates_ids,'time_Slot-'.$dates_id);
             }
 
             // dd($selected_dates_form,$dates_with_count, $dates_keys,$iterateDates,$dates_count,$selected_dates);
@@ -127,14 +139,14 @@ class StudentRegistrationController extends Controller
 
             if( $BranchName == 'uttara' ){
                 foreach($selected_dates as $dates){
-                    MockDates::where('date',$dates)
+                    MockDates::where('id',$dates)
                             ->where('branch','uttara')
                             ->increment('total_allocation',1);
                 }
             }
             else{
                 foreach($selected_dates as $dates){
-                    MockDates::where('date',$dates)
+                    MockDates::where('id',$dates)
                             ->where('branch','mirpur')
                             ->increment('total_allocation',1);
                 }
@@ -175,7 +187,26 @@ class StudentRegistrationController extends Controller
                     ]
                 );
             }
+
+            $countForSelectedTimeslots = count($dates_ids);
+
+            for($i=0;$i<$countForSelectedTimeslots;$i++){
+                $dates_id = explode('-',$dates_ids[$i]);
+                // dd($dates_ids[$i]);
+                $speakingTimeId = $dates_ids[$i];
+                // dd($request->$speakingTimeId);
+                StudentsPurhcasedMockTimes::create([
+                    'candidate_logs_id' => $candidateLog->id,
+                    'mock_dates_id' => $dates_id[1],
+                    'speaking_time_id' => $request->$speakingTimeId
+                ]);
+
+                SpeakingTime::where('id', $request->$speakingTimeId)
+                            ->increment('assinged_count',1);
+            }
             
+
+
             DB::commit();
 
             return redirect()->back()->with('success', 'Student Registered');
@@ -193,7 +224,21 @@ class StudentRegistrationController extends Controller
                             ->where('candidate_logs.id', $id)
                             ->select('candidate_logs.*','candidate_infos.*')
                             ->first();
-        return view('register.studentRegistration.candidateEdit', compact('getCandidateData'));
+
+        $getMockDatesUttara = MockDates::where('branch', 'uttara')
+                            ->where('total_allocation','<',40)
+                            ->get();
+        $getMockDatesMirpur = MockDates::where('branch', 'mirpur')
+                            ->where('total_allocation','<',40)
+                            ->get();
+
+        $getMockPrices = DB::table('price_tables')
+                            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+                            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+                            ->where('price_tables.offer_status','active')
+                            ->get();
+
+        return view('register.studentRegistration.candidateEdit', compact('getCandidateData','getMockPrices','getMockDatesMirpur','getMockDatesUttara'));
     }
 
     public function candidateEditStore(Request $request){
@@ -223,5 +268,9 @@ class StudentRegistrationController extends Controller
         CandidateInfo::find($id)->delete();
 
         return redirect()->back()->with('success', 'Candidate Deleted Successfully');
+    }
+
+    public function purchaseNewMock(Request $request){
+        dd($request->input());
     }
 }

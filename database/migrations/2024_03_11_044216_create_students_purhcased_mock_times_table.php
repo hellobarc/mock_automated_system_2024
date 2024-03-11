@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('speaking_times', function (Blueprint $table) {
+        Schema::create('students_purhcased_mock_times', function (Blueprint $table) {
             $table->id();
-            $table->integer('mock_date_id');
-            $table->string('time');
-            $table->integer('assinged_count');
+            $table->bigInteger('candidate_logs_id');
+            $table->bigInteger('mock_dates_id');
+            $table->bigInteger('speaking_time_id');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('speaking_times');
+        Schema::dropIfExists('students_purhcased_mock_times');
     }
 };

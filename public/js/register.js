@@ -2,19 +2,6 @@ window.onload = function () {
     document.getElementById('calender-div').style.display = "none";
     document.getElementById('mock_offers').style.display = "none";
 }
-var data = mockDatesUttara;
-var data = JSON.parse(data.replace(/&quot;/g, '"'));
-console.log(data);
-var dates = [];
-
-data.forEach(i => {
-    let a = i.date;     //slice(0, 2);
-    dates.push(a);
-});
-var datesLength = dates.length;
-console.log(dates);
-
-var selectedDates = [];
 
 function generate_year_range(start, end) {
     var years = "";
@@ -157,8 +144,8 @@ function showCalendar(month, year) {
                 cell.innerHTML = "<span>" + date + "</span>";
                 let presentDay = date + '-' + (month + 1) + '-' + year;
 
-                dates.forEach(i => {
-                    if (i == presentDay && date > today.getDate()) {
+                data.forEach(i => {
+                    if (i.date == presentDay && date > today.getDate()) {
                         cell.className = "date-picker-free-slot";
                         cell.addEventListener('click', function () {
                             let dateValue = this.dataset.date;
@@ -168,26 +155,9 @@ function showCalendar(month, year) {
                             console.log(selectedDate);
                             const sel = document.getElementById(this.id);
                             sel.classList.toggle('date-picker-selected');
-                            selectedDates.push(selectedDate);
-                            document.getElementById("selected_dates").insertAdjacentHTML('beforeend', `<input type="hidden" name="selected_dates[]" value="${selectedDate}">`);
-
-                            // const counts = {};
-
-                            // for (const num of selectedDates) {
-                            // counts[num] = counts[num] ? counts[num] + 1 : 1;
-                            // }
-
-                            // console.log(counts[selectedDate]);
-
-                            // if(counts[selectedDate] % 2 == 0){
-                            //     document.getElementById("time_slot_div").innerHTML = ``;
-                            // }
-                            // else{
-                            //     getTimeSlots(selectedDate, selectedBranch);
-                            // }
+                            document.getElementById("selected_dates").insertAdjacentHTML('beforeend', `<input type="hidden" name="selected_dates[]" value="${i.id}">`);
                             if(sel.classList.contains("date-picker-selected")){
-                                getTimeSlots(selectedDate, selectedBranch);
-                                // document.getElementById("time_slot_div").innerHTML = `<span>For ${selectedDate}</span><br>`;
+                                getTimeSlots(selectedDate, selectedBranch,i.id);
                             }
                             else{
                                 document.getElementById("time_slot_div").innerHTML = ``;
@@ -215,35 +185,25 @@ function daysInMonth(iMonth, iYear) {
     return 32 - new Date(iYear, iMonth, 32).getDate();
 }
 
-
-
-async function getTimeSlots(sdate,sbranch){
+async function getTimeSlots(sdate,sbranch,slotId){
     let timeSlotvalues =await axios.post("/get-time-slots",{
         params: {
             date: sdate,
             branch: sbranch
         }
     });
-    // console.log(timeSlotvalues.data.time_slots);
-    // document.getElementById("time_slot_div").innerHTML = `<span>For ${selectedDate}</span><br>`;
-    // document.getElementById("time_slot_div").innerHTML = ``;
-    // document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<span>For ${selectedDate}</span><br>`);
+    console.log(timeSlotvalues.data.time_slots);
+    document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<span style="color: red" >For ${sdate}</span><br>`);
     timeSlotvalues.data.time_slots.forEach(element => {
-        if(element.assinged_count >= 5){
+        if(element.assinged_count >= 6){
         }
         else
-            document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<input type="radio" onclick="selected()" id=selected-time-slot readonly name="time_Slot" value="" class="my-1">&nbsp;&nbsp;&nbsp;<label>${element.time}</label>&nbsp;&nbsp;&nbsp;&nbsp;<span>${5 - element.assinged_count} booking left</span> <br>`);
-            // document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<input type="text" readonly value="${element.assinged_count} slots booked" class="form-control my-1">`);
+            document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<input type="radio" onclick="" id=selected-time-slot-${sdate} name="time_Slot-${slotId}" value="${element.id}" class="my-1">&nbsp;&nbsp;&nbsp;<label>${element.time}</label>&nbsp;&nbsp;&nbsp;&nbsp;<span>${6 - element.assinged_count} booking left</span> <br>`);
     });
 }
 
 
-function selected(){
-    // event = event.target.value;
-    var element = document.getElementById('selected-time-slot');
-    element.classList.add('selected_time_slot');
 
-}
 
 
 

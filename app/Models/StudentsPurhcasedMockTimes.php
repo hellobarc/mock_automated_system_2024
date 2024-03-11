@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SpeakingTime extends Model
+class StudentsPurhcasedMockTimes extends Model
 {
     use HasFactory;
 
-    protected $table = 'speaking_times';
-
     protected $fillable = [
-        'mock_date_id',
-        'time',
-        'assinged_count'
+        'candidate_logs_id',
+        'mock_dates_id',
+        'speaking_time_id'
     ];
-    
 }

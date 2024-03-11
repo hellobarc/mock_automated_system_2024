@@ -30,15 +30,16 @@
                                 <div class="calender-div" id="calender-div">
                                     @include('components.calender')
                                 </div>
-                                <div class="my-4 mx-2" >
-                                    <span>Avaiable time Slots</span>
-                                    <div class="" id="time_slot_div">
-
-                                    </div>
-                                </div>
+                                
                                 <form action="{{ route('candidate.form.store') }}" method="POST" class="form-control">
                                     @csrf
-                                    
+                                    <div class=" row my-4" >
+                                        {{-- <span>Avaiable time Slots</span> --}}
+                                        <label for="">Avaiable time Slots</label>
+                                        <div class="form-group" id="time_slot_div">
+    
+                                        </div>
+                                    </div>
                                     <div class="row my-4">
                                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                             <div class="form-group">
@@ -107,9 +108,9 @@
                                                 <label for="">Package</label>
                                                 <select type="package" class="form-control" name="package">
                                                     <option value="" selected>Select An Option</option>
-                                                    <option value="a1-a2">A1-A2</option>
-                                                    <option value="b1-b2">B1-B2</option>
-                                                    <option value="c1-c2">C1-C2</option>
+                                                    <option value="regular">Regular</option>
+                                                    <option value="offered">Offered</option>
+                                                    <option value="free">Free</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -190,12 +191,4 @@ function offer_status(event) {
             }
         }
     }
-
-// async function getTimeSlots(){
-//     let timeSlotvalues =await axios.get("/get-time-slots"){
-//         date : ,
-//         branch : 
-//     };
-//     console.log(timeSlotvalues);
-// }
 </script>
