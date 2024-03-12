@@ -39,6 +39,9 @@
                                         <div class="form-group" id="time_slot_div">
     
                                         </div>
+                                        <div id="branch_name_div">
+
+                                        </div>
                                     </div>
                                     <div class="row my-4">
                                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">

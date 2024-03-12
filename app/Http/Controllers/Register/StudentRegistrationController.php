@@ -271,6 +271,128 @@ class StudentRegistrationController extends Controller
     }
 
     public function purchaseNewMock(Request $request){
-        dd($request->input());
+        // dd($request->input());
+
+        DB::beginTransaction();
+        try{
+            $request->validate([
+                'package' => 'required',
+                'mock_number' => 'required',
+                'payment_recieved' => 'required',
+                'mock_offers' => 'required',
+            ]);
+
+            $candidateLogId = $request->id;
+            $BranchName = $request->branch_name;
+            $package   = $request->package;
+            $mockNumbers = $request->mock_number;
+            $payment_recieved = $request->payment_recieved;
+            $mockOffers = $request->mock_offers;
+            $time = time();
+
+
+            $selected_dates_form = $request->selected_dates;
+
+            $dates_with_count = array_count_values($selected_dates_form);
+            $dates_keys = array_keys($dates_with_count);
+            $dates_count = array_values($dates_with_count);
+            $selected_dates = [];
+            $iterateDates = count($dates_with_count);
+
+            for($i=0 ; $i<$iterateDates ; $i++){
+                if($dates_count[$i] % 2 == 0){
+                    
+                }
+                else{
+                    array_push($selected_dates, $dates_keys[$i]);
+                }
+            }
+
+            $dates_ids = [];
+            foreach($selected_dates as $dates_id){
+                // $request->validate([
+                //     'time_Slot-'.$dates_id => 'required'
+                // ]);
+                array_push($dates_ids,'time_Slot-'.$dates_id);
+            }
+
+            if( $BranchName == 'uttara' ){
+                foreach($selected_dates as $dates){
+                    MockDates::where('id',$dates)
+                            ->where('branch','uttara')
+                            ->increment('total_allocation',1);
+                }
+            }
+            else{
+                foreach($selected_dates as $dates){
+                    MockDates::where('id',$dates)
+                            ->where('branch','mirpur')
+                            ->increment('total_allocation',1);
+                }
+            }
+
+            $getMockPrices = PriceTable::where('mock_number', $mockNumbers)
+                            ->first();
+            $payment_total = $getMockPrices->mock_price;
+
+            if(isset($mockOffers)){
+                $payment_total = $request->mock_offers;
+            }
+            
+            if($payment_recieved < $payment_total ){
+                $due_fees = $payment_total-$payment_recieved;
+
+                PurchasedMock::create(
+                    [
+                    'candidate_log_id' => $candidateLogId,
+                    'mock_number' => $mockNumbers,
+                    'date' => date('d-m-y', $time),
+                    'payment_status' => 'due',
+                    'paid_fees' => $payment_recieved,
+                    'due_fees' => $due_fees,
+                    'total_fees' => $payment_total,
+                    ]
+                );
+            }
+            elseif( $payment_recieved == $payment_total ){
+                PurchasedMock::create(
+                    [
+                    'candidate_log_id' => $candidateLogId,
+                    'date' => date('d-m-y', $time),
+                    'mock_number' => $mockNumbers,
+                    'payment_status' => 'paid',
+                    'paid_fees' => $payment_recieved,
+                    'total_fees' => $payment_total
+                    ]
+                );
+            }
+
+            $countForSelectedTimeslots = count($dates_ids);
+
+            for($i=0;$i<$countForSelectedTimeslots;$i++){
+                $dates_id = explode('-',$dates_ids[$i]);
+                // dd($dates_ids[$i]);
+                $speakingTimeId = $dates_ids[$i];
+                // dd($request->$speakingTimeId);
+                StudentsPurhcasedMockTimes::create([
+                    'candidate_logs_id' => $candidateLogId,
+                    'mock_dates_id' => $dates_id[1],
+                    'speaking_time_id' => $request->$speakingTimeId
+                ]);
+
+                SpeakingTime::where('id', $request->$speakingTimeId)
+                            ->increment('assinged_count',1);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Purchased New Mock');
+        }
+        catch(Exception $e){
+            DB::rollback();
+            return redirect()->back()->with('fail', $e);
+        }
     }
+
+
+    
 }

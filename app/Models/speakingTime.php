@@ -16,5 +16,13 @@ class SpeakingTime extends Model
         'time',
         'assinged_count'
     ];
+
+    public function MockDates(){
+        return $this->belongsTo(MockDate::class);
+    }
+
+    Public function BookedMockTime(){
+        return $this->hasMany(StudentsPurhcasedMockTimes::class, 'speaking_time_id');
+    }
     
 }

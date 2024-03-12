@@ -13,4 +13,12 @@ class MockDates extends Model
         'date',
         'total_allocation'
     ];
+
+    public function SpeakingTimes(){
+        return $this->hasMany(SpeakingTime::class, 'mock_date_id');
+    }
+
+    Public function BookedMockTime(){
+        return $this->hasMany(StudentsPurhcasedMockTimes::class, 'mock_dates_id');
+    }
 }

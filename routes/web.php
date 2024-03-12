@@ -46,10 +46,15 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::post('/candidate-edit-store', 'candidateEditStore')->name('candidate.edit.store');
         Route::get('/candidate-delete/{id}', 'candidateDelete')->name('candidate.delete');
         Route::post('/purchase-new-mock', 'purchaseNewMock')->name('buy.new.mock');
-        
     });
 
-    Route::post('/get-time-slots',[SpeakingTimeController::class,'speakingTimeSlots'])->name('something-like-that');
+
+    Route::controller(SpeakingTimeController::class)->group(function(){
+        Route::post('/get-time-slots', 'speakingTimeSlots')->name('something-like-that');
+        Route::get('/candidate-mock-dates/{id}', 'mockDateTime')->name('candidate.mock.date');
+        Route::post('/set-time-slot', 'newTimeSlot')->name('set.time.slot');
+        Route::post('/change-mock-date', 'mockDateChange')->name('change.mock.date');
+    });
 });
 
 Route::middleware(['auth', 'user-access:assessor'])->group(function () {

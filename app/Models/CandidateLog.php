@@ -18,4 +18,8 @@ class CandidateLog extends Model
     public function CandidateInfo(){
         return $this->hasOne(CandidateInfo::class, 'candidate_log_id');
     }
+
+    Public function BookedMockTime(){
+        return $this->hasMany(StudentsPurhcasedMockTimes::class, 'candidate_logs_id');
+    }
 }

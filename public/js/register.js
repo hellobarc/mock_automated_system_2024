@@ -85,6 +85,7 @@ var selectedBranch;
 function selectBranch(event) {
     selectedBranch = event.target.value;
     showCalendar(currentMonth, currentYear);
+    document.getElementById("branch_name_div").insertAdjacentHTML('beforeend', `<input type="hidden" onclick="" id="" name="branch_name" value="${selectedBranch}" class="my-1">`);
 }
 
 function showCalendar(month, year) {

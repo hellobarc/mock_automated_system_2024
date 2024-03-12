@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('candidate_logs_id');
             $table->bigInteger('mock_dates_id');
-            $table->bigInteger('speaking_time_id');
+            $table->bigInteger('speaking_time_id')->nullable();
             $table->timestamps();
         });
     }

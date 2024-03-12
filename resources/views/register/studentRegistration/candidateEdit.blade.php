@@ -16,6 +16,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2>Candidate Edit Store</h2>
+                                <a href="{{ route('candidate.mock.date', $getCandidateData->id )}}" class="btn btn-primary float-end">Time Slots For This Candidate</a>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('candidate.edit.store') }}" method="POST" class="form-control">
@@ -125,10 +126,23 @@
                             <form action="{{ route('buy.new.mock') }}" method="POST">
                                 @csrf
                                 <div class=" row my-4" >
+                                    <input type="hidden" name="id" value="{{ $getCandidateData->id }}">
                                     {{-- <span>Avaiable time Slots</span> --}}
                                     <label for="">Avaiable time Slots</label>
                                     <div class="form-group" id="time_slot_div">
 
+                                    </div>
+                                    <div id="branch_name_div">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <div id="selected_dates">
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
