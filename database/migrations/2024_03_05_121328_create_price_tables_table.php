@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('price_tables', function (Blueprint $table) {
             $table->id();
             $table->string('mock_number');
-            $table->string('mock_price');
+            $table->string('regular_price');
+            $table->string('offered_price');
             $table->enum('offer_status',['active','inactive']);
             $table->timestamps();
         });

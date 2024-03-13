@@ -42,21 +42,12 @@ class SpeakingTimeController extends Controller
     public function mockDateTime($id){
         $candidateID = $id;
 
-        // $getMockDate = DB::table('students_purhcased_mock_times as st')
-        // ->join('mock_dates', 'mock_dates.id', '=', 'st.mock_dates_id')
-        // ->where('st.candidate_logs_id', $candidateID)
-        // ->where('st.speaking_time_id', null)
-        // ->get();
-
         $getMockDateWithTime = DB::table('students_purhcased_mock_times as st')
         ->join('mock_dates', 'mock_dates.id', '=', 'st.mock_dates_id')
         ->join('speaking_times','speaking_times.id', '=', 'st.speaking_time_id')
         ->where('st.candidate_logs_id', $candidateID)
+        ->orderBy('mock_dates.date', 'asc')
         ->get();
-
-        // $getMockDatewithSpeakingTimes = MockDates::where('id',1)->with('SpeakingTimes')->get();
-        // $getMockDatewithSpeakingTimes = CandidateLog::where('id', $candidateID)
-        //     ->with('BookedMockTime','BookedMockTime.MockDate','BookedMockTime.SpeakingTime')->get();
 
         $getMockDatewithSpeakingTimes = StudentsPurhcasedMockTimes::where('candidate_logs_id', $candidateID)
         ->where('speaking_time_id', null)->with('MockDate','MockDate.SpeakingTimes')
@@ -65,14 +56,20 @@ class SpeakingTimeController extends Controller
         $getMockDates = MockDates::where('total_allocation', '<' , 40)
                         ->get();
 
-        // dd($getMockDatewithSpeakingTimes,$getMockDateWithTime,$getMockDates);
-
         return view('register.studentRegistration.candidateTimeSlots', compact('getMockDatewithSpeakingTimes','getMockDateWithTime','getMockDates'));
     }
 
     public function newTimeSlot(Request $request){
-        $dateId = $request->date_id;
-        
+        $mockDateId = $request->mock_date_id;
+        $candidateId = $request->candidate_id;
+        $timeSlotId = $request->time_slot;
+
+        StudentsPurhcasedMockTimes::where('candidate_logs_id', $candidateId)
+                                    ->where('mock_dates_id', $mockDateId)
+                                    ->update([
+                                        'speaking_time_id' => $timeSlotId
+                                    ]);
+        return redirect()->back()->with('success', 'Time Slot Booked Successfully');
     }
 
     public function mockDateChange(Request $request){
@@ -95,5 +92,21 @@ class SpeakingTimeController extends Controller
                 ->Increment('total_allocation',1);
         
         return redirect()->back()->with('success', 'Date Changed');
+    }
+
+    public function getChangeSpeakingTime(Request $request){
+        // dd($request->input());
+        $getTimeSlotsForDate = MockDates::where('id', $request->params['date_id'])
+        ->with('SpeakingTimes')
+        ->get();
+
+        // dd($getTimeSlotsForDate);
+        return response()->json([
+            'time_slots_for_date' => $getTimeSlotsForDate
+        ]);
+    }
+
+    public function changeSpeakingTime(){
+        dd();
     }
 }

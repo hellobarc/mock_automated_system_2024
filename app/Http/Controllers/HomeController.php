@@ -28,7 +28,22 @@ class HomeController extends Controller
 
     public function registerHome()
     {
-        return view('register.home');
+        $getMockDatesUttara = MockDates::where('branch', 'uttara')
+                            ->where('total_allocation','<',40)
+                            ->get();
+        $getMockDatesMirpur = MockDates::where('branch', 'mirpur')
+                            ->where('total_allocation','<',40)
+                            ->get();
+
+        $getMockPrices = DB::table('price_tables')
+                            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+                            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+                            ->where('price_tables.offer_status','active')
+                            ->get();
+
+
+        return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockPrices'));
+    
     }
 
     public function assessorHome()

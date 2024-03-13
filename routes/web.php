@@ -54,6 +54,8 @@ Route::middleware(['auth', 'user-access:register'])->group(function () {
         Route::get('/candidate-mock-dates/{id}', 'mockDateTime')->name('candidate.mock.date');
         Route::post('/set-time-slot', 'newTimeSlot')->name('set.time.slot');
         Route::post('/change-mock-date', 'mockDateChange')->name('change.mock.date');
+        Route::post('/get-change-speaking-time', 'getChangeSpeakingTime')->name('data.change.speaking.time');
+        Route::post('/change-speaking-time', 'changeSpeakingTime')->name('change.speaking.time');
     });
 });
 

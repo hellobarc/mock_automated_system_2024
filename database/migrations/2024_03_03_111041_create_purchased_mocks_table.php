@@ -16,6 +16,7 @@ return new class extends Migration
             $table->biginteger('candidate_log_id');
             $table->string('date');
             $table->string('mock_number');
+            $table->string('package');
             $table->string('payment_status');
             $table->integer('paid_fees');
             $table->integer('due_fees')->nullable();

@@ -14,6 +14,7 @@ class PurchasedMock extends Model
         'date',
         'payment_status',
         'mock_number',
+        'package',
         'paid_fees',
         'due_fees',
         'total_fees'

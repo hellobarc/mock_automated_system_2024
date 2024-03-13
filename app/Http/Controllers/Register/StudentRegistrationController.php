@@ -45,13 +45,6 @@ class StudentRegistrationController extends Controller
                             ->where('price_tables.offer_status','active')
                             ->get();
 
-        // $getMockDatesTimeUttara = SpeakingTime::where('date')
-        //                     ->where('branch', 'uttara')
-        //                     ->get();
-
-        // $getMockDatesTimeMirpur = SpeakingTime::where('date')
-        //                     ->where('branch', 'mirpur')
-        //                     ->get();
 
         return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockPrices'));
     }
@@ -67,12 +60,11 @@ class StudentRegistrationController extends Controller
                 'full_name' => 'required|string|max:50',
                 'email' => 'required|string|max:50',
                 'phone_number' => 'required|string|max:20',
-                'branch_name_for_mock' => 'required|max:20',
                 'student_source' => 'required|max:20',
                 'purpose_of_ielts' => 'required|max:20',
                 'selected_dates' => 'required',
                 'mock_number' => 'required|max:10',
-                'payment_recieved' => 'required|max:20',
+                // 'payment_recieved' => 'required|max:20',
                 'selected_dates' => ['required', new SelectedDates],
                 ]
             );
@@ -113,6 +105,7 @@ class StudentRegistrationController extends Controller
             $purposeOfIELTS = $request->purpose_of_ielts;
             $price = $request->price;
             $mockNumbers = $request->mock_number;
+            $package = $request->package;
             $payment_recieved = $request->payment_recieved;
             $mockOffers = $request->mock_offers;
             
@@ -167,6 +160,7 @@ class StudentRegistrationController extends Controller
                     [
                     'candidate_log_id' => $candidateLog->id,
                     'mock_number' => $mockNumbers,
+                    'package' => $package,
                     'date' => date('d-m-y', $time),
                     'payment_status' => 'due',
                     'paid_fees' => $payment_recieved,
@@ -181,6 +175,7 @@ class StudentRegistrationController extends Controller
                     'candidate_log_id' => $candidateLog->id,
                     'date' => date('d-m-y', $time),
                     'mock_number' => $mockNumbers,
+                    'package' => $package,
                     'payment_status' => 'paid',
                     'paid_fees' => $payment_recieved,
                     'total_fees' => $payment_total
@@ -204,9 +199,6 @@ class StudentRegistrationController extends Controller
                 SpeakingTime::where('id', $request->$speakingTimeId)
                             ->increment('assinged_count',1);
             }
-            
-
-
             DB::commit();
 
             return redirect()->back()->with('success', 'Student Registered');

@@ -17,22 +17,32 @@
                                 <h2>Student Registration</h2>
                             </div>
                             <div class="card-body">
-                                <div class="row my-4">
+                                {{-- <div class="row my-4">
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <label for="" class="fs-4">Select Branch</label>
-                                        <select name="" id="branch_select_for_calender" class="form-control" onchange="selectBranch(event)">
+                                        <select name="" id="branch_name_for_mock" class="form-control" onchange="selectBranch(event)">
                                             <option value="" selected>Select An Option</option>
                                             <option value="uttara">Uttara</option>
                                             <option value="mirpur">Mirpur</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="calender-div" id="calender-div">
                                     @include('components.calender')
                                 </div>
                                 
                                 <form action="{{ route('candidate.form.store') }}" method="POST" class="form-control">
                                     @csrf
+                                    <div class="row my-4">
+                                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label for="" class="fs-4">Select Branch</label>
+                                            <select name="branch_name_for_mock" id="branch_name_for_mock" class="form-control" onchange="selectBranch(event)">
+                                                <option value="" selected>Select An Option</option>
+                                                <option value="uttara">Uttara</option>
+                                                <option value="mirpur">Mirpur</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class=" row my-4" >
                                         {{-- <span>Avaiable time Slots</span> --}}
                                         <label for="">Avaiable time Slots</label>
@@ -83,17 +93,8 @@
                                     </div>
 
                                     <div class="row my-4">
-                                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                            <div class="form-group">
-                                                <label for="">Mock Venue</label>
-                                                <select name="branch_name_for_mock" id="" class="form-control">
-                                                    <option value="" selected>Select An Option</option>
-                                                    <option value="uttara">Uttara</option>
-                                                    <option value="mirpur">Mirpur</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        
+                                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <div class="form-group">
                                                 <label for="">Student Source</label>
                                                 <select name="student_source" id="" class="form-control">
