@@ -12,7 +12,9 @@ use App\Models\{
     MockDates,
     PurchasedMock,
     PriceTable,
+    OfferPrice,
     SpeakingTime,
+    MockAdvisors,
     StudentsPurhcasedMockTimes
 };
 use App\Rules\SelectedDates;
@@ -39,20 +41,22 @@ class StudentRegistrationController extends Controller
                             ->where('total_allocation','<',40)
                             ->get();
 
-        $getMockPrices = DB::table('price_tables')
-                            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
-                            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
-                            ->where('price_tables.offer_status','active')
-                            ->get();
+        // $getMockPrices = DB::table('price_tables')
+        //                     ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+        //                     ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+        //                     ->where('price_tables.offer_status','active')
+        //                     ->get();
+        $getMockOffers = OfferPrice::get();
 
+        $getMockAdvisors = MockAdvisors::get();
 
-        return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockPrices'));
+        return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockOffers','getMockAdvisors'));
     }
 
     
 
     public function candidateFormStore(Request $request){
-        // dd($request->input());
+        dd($request->input());
         DB::beginTransaction();
         try{        
             $request->validate(
@@ -63,7 +67,6 @@ class StudentRegistrationController extends Controller
                 'student_source' => 'required|max:20',
                 'purpose_of_ielts' => 'required|max:20',
                 'selected_dates' => 'required',
-                'mock_number' => 'required|max:10',
                 // 'payment_recieved' => 'required|max:20',
                 'selected_dates' => ['required', new SelectedDates],
                 ]
@@ -108,7 +111,12 @@ class StudentRegistrationController extends Controller
             $package = $request->package;
             $payment_recieved = $request->payment_recieved;
             $mockOffers = $request->mock_offers;
-            
+            $advisor_id = $request->advisor_name; 
+            $studentBatchNo = $request->student_batch_no;
+            $regular_package = $request->regular; 
+            $free_package = $request->free; 
+            $offered_package = $request->offered; 
+
             $time = time();
             $studentID = Helper::UniqueID(5).substr($BranchName,0,1).date('dmy',$time);
 
@@ -123,8 +131,10 @@ class StudentRegistrationController extends Controller
             CandidateInfo::create(
                 [
                 'candidate_log_id' => $candidateLog->id,
+                'advisor_id' => $advisor_id,
                 'branch_name_for_mock' => $BranchName,
                 'purpose_of_ielts' => $purposeOfIELTS,
+                'student_batch_no' => $studentBatchNo,
                 'phone_number' => $phoneNumber,
                 'student_source' => $studentSource
                 ]
@@ -145,42 +155,32 @@ class StudentRegistrationController extends Controller
                 }
             }
 
-            $getMockPrices = PriceTable::where('mock_number', $mockNumbers)
-                            ->first();
-            $payment_total = $getMockPrices->mock_price;
-
-            if(isset($mockOffers)){
-                $payment_total = $request->mock_offers;
+            if( $regular_package == 'on'){
+                PurchasedMock::create([
+                    'package' => 'regular',
+                    'number_of_mocks_regular' => $request->number_of_mocks_regular,
+                    'total_amount_regular' => $request->total_amount_regular,
+                    'payment_recieved_regular' => $request->payment_recieved_regular,
+                ]);
             }
-            
-            if($payment_recieved < $payment_total ){
-                $due_fees = $payment_total-$payment_recieved;
 
-                PurchasedMock::create(
-                    [
-                    'candidate_log_id' => $candidateLog->id,
-                    'mock_number' => $mockNumbers,
-                    'package' => $package,
-                    'date' => date('d-m-y', $time),
-                    'payment_status' => 'due',
-                    'paid_fees' => $payment_recieved,
-                    'due_fees' => $due_fees,
-                    'total_fees' => $payment_total,
-                    ]
-                );
+            if( $free_package == 'on'){
+                PurchasedMock::create([
+                    'package' => 'free',
+                    'free_number_of_mocks' => $request->free_number_of_mocks,
+                    'free_current_batch_no' => $request->free_current_batch_no,
+                ]);
             }
-            elseif( $payment_recieved == $payment_total ){
-                PurchasedMock::create(
-                    [
-                    'candidate_log_id' => $candidateLog->id,
-                    'date' => date('d-m-y', $time),
-                    'mock_number' => $mockNumbers,
-                    'package' => $package,
-                    'payment_status' => 'paid',
-                    'paid_fees' => $payment_recieved,
-                    'total_fees' => $payment_total
-                    ]
-                );
+
+            if( $offered_package == 'on' ){
+                PurchasedMock::create([
+                    'package' => 'offered',
+                    'number_of_mocks_offered' => $request->number_of_mocks_offered,
+                    'number_of_mocks_offered_free' => $request->number_of_mocks_offered_free,
+                    'number_of_mocks_offered_paid' => $request->number_of_mocks_offered_paid,
+                    'total_amount_offered' => $request->total_amount_offered,
+                    'payment_recieved_offered' => $request->payment_recieved_offered,
+                ]);
             }
 
             $countForSelectedTimeslots = count($dates_ids);

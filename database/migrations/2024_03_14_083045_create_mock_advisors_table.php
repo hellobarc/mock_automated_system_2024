@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //unused
-        Schema::create('offer_prices', function (Blueprint $table) {
+        Schema::create('mock_advisors', function (Blueprint $table) {
             $table->id();
-            $table->string('offer_description');
-            $table->enum('offer_eligibility',['all', 'student']);
-            $table->enum('offer_status',['active','inactive']);
+            $table->string('advisor_name');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offer_prices');
+        Schema::dropIfExists('mock_advisors');
     }
 };

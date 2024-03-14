@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('candidate_infos', function (Blueprint $table) {
             $table->id();
             $table->biginteger('candidate_log_id');
+            $table->biginteger('advisor_id');
             $table->string('branch_name_for_mock');
+            $table->string('student_batch_no');
             $table->enum('purpose_of_ielts',['ac','gt']);
             $table->string('phone_number');
             $table->enum('student_source', ['inhouse','outside']);

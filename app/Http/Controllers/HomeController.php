@@ -3,7 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\{
+    StudentRegistration,
+    CandidateLog,
+    CandidateInfo,
+    MockDates,
+    PurchasedMock,
+    PriceTable,
+    SpeakingTime,
+    OfferPrice,
+    MockAdvisors,
+    StudentsPurhcasedMockTimes
+};
+use DB;
 class HomeController extends Controller
 {
     /**
@@ -35,14 +47,17 @@ class HomeController extends Controller
                             ->where('total_allocation','<',40)
                             ->get();
 
-        $getMockPrices = DB::table('price_tables')
-                            ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
-                            ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
-                            ->where('price_tables.offer_status','active')
-                            ->get();
+        // $getMockPrices = DB::table('price_tables')
+        //                     ->join('offer_prices','price_tables.id', '=', 'offer_prices.price_table_id')
+        //                     ->select('offer_prices.*','price_tables.*','offer_prices.price as offer_price')
+        //                     ->where('price_tables.offer_status','active')
+        //                     ->get();
 
+        $getMockOffers = OfferPrice::get();
 
-        return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockPrices'));
+        $getMockAdvisors = MockAdvisors::get();
+        
+        return view('register.studentRegistration.registrationForm2', compact('getMockDatesUttara','getMockDatesMirpur','getMockOffers','getMockAdvisors'));
     
     }
 

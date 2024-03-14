@@ -1,6 +1,10 @@
 window.onload = function () {
     document.getElementById('calender-div').style.display = "none";
-    document.getElementById('mock_offers').style.display = "none";
+    document.getElementById('regular-offers').style.display = "none";
+    document.getElementById('free-offers').style.display = "none";
+    document.getElementById('offered-offers').style.display = "none";
+    document.getElementById('student_batch_no').style.display = "none";
+    document.getElementById('offered_payment').style.display = "none";    
 }
 
 function generate_year_range(start, end) {
@@ -202,6 +206,52 @@ async function getTimeSlots(sdate,sbranch,slotId){
             document.getElementById("time_slot_div").insertAdjacentHTML('beforeend', `<input type="radio" onclick="" id=selected-time-slot-${sdate} name="time_Slot-${slotId}" value="${element.id}" class="my-1">&nbsp;&nbsp;&nbsp;<label>${element.time}</label>&nbsp;&nbsp;&nbsp;&nbsp;<span>${6 - element.assinged_count} booking left</span> <br>`);
     });
 }
+
+
+//form price inputs
+
+function regularOffers() {
+    var x = document.getElementById('regular-offers');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+function freeOffers() {
+    var x = document.getElementById('free-offers');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+function offeredOffers() {
+    var x = document.getElementById('offered-offers');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+function inhouseStudent(){
+    let x = document.getElementById('student_source').value;
+    console.log(x);
+    if(x == 'inhouse'){
+        document.getElementById('student_batch_no').style.display = "block";
+    }
+    else{
+        document.getElementById('student_batch_no').style.display = "none";
+    }
+}
+
+function offerPrices(){
+    document.getElementById('offered_payment').style.display = "block";
+}
+
 
 
 
